@@ -195,11 +195,11 @@ Django 4.1 will bring several new features to form rendering.
 
 2. There's a new `<div>` based form template which implements `<fieldset>` and
    `<legend>` to group related inputs (e.g. radios). Using this template is
-   highly recomended over the current [`as_table`](https://docs.djangoproject.com/en/4.0/ref/forms/api/#as-ul), 
+   highly recommended over the current [`as_table`](https://docs.djangoproject.com/en/4.0/ref/forms/api/#as-ul), 
    [`as_p`](https://docs.djangoproject.com/en/4.0/ref/forms/api/#as-p) and 
    [`as_ul`](https://docs.djangoproject.com/en/4.0/ref/forms/api/#as-ul) templates.
 
-3. In additon to the [`form.label_tag`](https://docs.djangoproject.com/en/4.0/ref/forms/api/#django.forms.BoundField.label_tag) 
+3. In addition to the [`form.label_tag`](https://docs.djangoproject.com/en/4.0/ref/forms/api/#django.forms.BoundField.label_tag) 
    we used above there's a 
    [`form.legend_tag`](https://docs.djangoproject.com/en/4.1/ref/forms/api/#django.forms.BoundField.legend_tag) 
    to render the field's label in a `<legend>`
