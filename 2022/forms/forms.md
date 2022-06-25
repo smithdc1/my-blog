@@ -208,5 +208,36 @@ Django 4.1 will bring several new features to form rendering.
 
 ## Anything else?
 
-I've got more thougths on potential future developments to ease this further.
-But that's for another day. I'm off to go enjoy the summer first :-)
+Yes!
+
+As of Django 4.1 Forms and Widgets (i.e. its `<input>`) are renderable using 
+the tempate engine. Django also has a strong concept of a field with the 
+[`BoundField`](https://docs.djangoproject.com/en/4.0/ref/forms/api/#django.forms.BoundField)
+class. This contains all of the information required to render a field such as
+its label, errors, help text and its Widget. 
+
+As in the example above, this means we're able to loop over each field in a
+form and render each field in the same way. However, say you'd like to have 
+`version` and `tags` on the same row (maybe needing these fields to be wrapped 
+in a `<div>`) we would need to go back to writing out the form in full. 
+
+Rather, I'd like to be able to be able to have a `BoundField` as a renderable
+object. This would allow a form to be written something like this:
+
+``` html+django
+<div>
+   {{ form.title|as_field }}
+   {{ form.language|as_field }}
+   <div class="row">
+      {{ form.version|as_field }}
+      {{ form.tags|as_field }}
+   </div>
+   {{ form.code|as_field }}
+   {{ form.description|as_field }}
+</div>
+```
+
+Note that I've added a new `as_field` filter as currently calling `str` on a
+`BoundField` returns its Widget and changing this would be too severe a
+change in my view. Likely there are other approaches, and therefore further
+thought will be required. 
