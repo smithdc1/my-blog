@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="prev" title="2022 Posts" href="../index.html" />
 
-    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.04.1"/>
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
         <title>Forms in Django 4.0+ - David Smith&#39;s blog documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
@@ -197,7 +197,7 @@
 <h1>Forms in Django 4.0+<a class="headerlink" href="#forms-in-django-4-0" title="Permalink to this heading">#</a></h1>
 <section id="background">
 <h2>Background<a class="headerlink" href="#background" title="Permalink to this heading">#</a></h2>
-<p>Until Django 4.0 forms were rendered by string concatenation. A number of 3rd party
+<p>Prior to Django 4.0 forms were rendered by string concatenation. A number of 3rd party
 packages allowed for forms to be rendered as templates e.g. floppy forms, crispy-forms.</p>
 <p>Django 4.0 introduced the capability to render forms using the template engine.
 This allowed the form template to be set per form class or per instance if a template
@@ -206,7 +206,7 @@ name is provided when calling <code class="docutils literal notranslate"><span c
 <section id="how-to">
 <h2>How-to<a class="headerlink" href="#how-to" title="Permalink to this heading">#</a></h2>
 <p>Let’s see an example of how a form may currently be rendered in a template and see
-how I would use the new capabilites in Django 4.0.</p>
+how I would use the new capabilities in Django 4.0.</p>
 <p>I found the example below from one of Django’s own projects. It may also be that the
 form is written out in full in multiple places increasing the maintenance burden, let us
 also see if we simplify the template and reduce the need for repetition.</p>
@@ -267,7 +267,7 @@ to use the <code class="docutils literal notranslate"><span class="pre">|safe</s
 </section>
 <section id="form-template">
 <h3>Form Template<a class="headerlink" href="#form-template" title="Permalink to this heading">#</a></h3>
-<p>I believe the gold standardard is that in your main template you should use <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">form</span> <span class="pre">}}</span></code>
+<p>I believe the gold standard is that in your main template you should use <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">form</span> <span class="pre">}}</span></code>
 to render your form.</p>
 <p>Django 4.0 introduced template based rendering for forms which allows us to do
 just this! Let’s create a new template for this form.</p>
@@ -310,14 +310,14 @@ definition as a preliminary step.</p></li>
 </section>
 <section id="use-the-template">
 <h3>Use the template<a class="headerlink" href="#use-the-template" title="Permalink to this heading">#</a></h3>
-<p>To use this template to render the form the following changes are requried.</p>
+<p>To use this template to render the form the following changes are required.</p>
 <ol class="arabic simple">
 <li><p>Define the <a class="reference external" href="https://docs.djangoproject.com/en/4.0/ref/forms/api/#template-name"><code class="docutils literal notranslate"><span class="pre">template_name</span></code></a>
 on the form definition.</p></li>
 <li><p>Set the ordering of the fields using <a class="reference external" href="https://docs.djangoproject.com/en/4.0/ref/forms/api/#django.forms.Form.field_order"><code class="docutils literal notranslate"><span class="pre">field_order</span></code></a>
 on the form definition. Without this, the form will be rendered in the order which
 the fields are defined in the model.</p></li>
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">form</span> <span class="pre">}}</span></code> to use the template</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">form</span> <span class="pre">}}</span></code> to use the template.</p></li>
 </ol>
 <p>Let’s see the diff for these changes.</p>
 <p>In the form:</p>
@@ -376,8 +376,34 @@ to render the field’s label in a <code class="docutils literal notranslate"><s
 </section>
 <section id="anything-else">
 <h2>Anything else?<a class="headerlink" href="#anything-else" title="Permalink to this heading">#</a></h2>
-<p>I’ve got more thougths on potential future developments to ease this further.
-But that’s for another day. I’m off to go enjoy the summer first :-)</p>
+<p>Yes!</p>
+<p>As of Django 4.1 Forms and Widgets (i.e. its <code class="docutils literal notranslate"><span class="pre">&lt;input&gt;</span></code>) are renderable using
+the template engine. Django also has a strong concept of a field with the
+<a class="reference external" href="https://docs.djangoproject.com/en/4.0/ref/forms/api/#django.forms.BoundField"><code class="docutils literal notranslate"><span class="pre">BoundField</span></code></a>
+class. This contains all of the information required to render a field such as
+its label, errors, help text and its Widget.</p>
+<p>As in the example above, this means we’re able to loop over each field in a
+form and render each field in the same way. However, say you’d like to have
+<code class="docutils literal notranslate"><span class="pre">version</span></code> and <code class="docutils literal notranslate"><span class="pre">tags</span></code> on the same row (maybe needing these fields to be wrapped
+in a <code class="docutils literal notranslate"><span class="pre">&lt;div&gt;</span></code>) we would need to go back to writing out the form in full.</p>
+<p>Rather, I’d like to be able to be able to have a <code class="docutils literal notranslate"><span class="pre">BoundField</span></code> as a renderable
+object. This would allow a form to be written something like this:</p>
+<div class="highlight-html+django notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+   <span class="cp">{{</span> <span class="nv">form.title</span><span class="o">|</span><span class="nf">as_field</span> <span class="cp">}}</span>
+   <span class="cp">{{</span> <span class="nv">form.language</span><span class="o">|</span><span class="nf">as_field</span> <span class="cp">}}</span>
+   <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;row&quot;</span><span class="p">&gt;</span>
+      <span class="cp">{{</span> <span class="nv">form.version</span><span class="o">|</span><span class="nf">as_field</span> <span class="cp">}}</span>
+      <span class="cp">{{</span> <span class="nv">form.tags</span><span class="o">|</span><span class="nf">as_field</span> <span class="cp">}}</span>
+   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+   <span class="cp">{{</span> <span class="nv">form.code</span><span class="o">|</span><span class="nf">as_field</span> <span class="cp">}}</span>
+   <span class="cp">{{</span> <span class="nv">form.description</span><span class="o">|</span><span class="nf">as_field</span> <span class="cp">}}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>Note that I’ve added a new <code class="docutils literal notranslate"><span class="pre">as_field</span></code> filter as currently calling <code class="docutils literal notranslate"><span class="pre">str</span></code> on a
+<code class="docutils literal notranslate"><span class="pre">BoundField</span></code> returns its Widget and changing this would be too severe a
+change in my view. Likely there are other approaches, and therefore further
+thought will be required.</p>
 </section>
 </section>
 
