@@ -2,7 +2,7 @@
 
 ## Background
 
-Until Django 4.0 forms were rendered by string concatenation. A number of 3rd party
+Prior to Django 4.0 forms were rendered by string concatenation. A number of 3rd party
 packages allowed for forms to be rendered as templates e.g. floppy forms, crispy-forms.
 
 Django 4.0 introduced the capability to render forms using the template engine.
@@ -12,7 +12,7 @@ name is provided when calling `render()`.
 ## How-to
 
 Let's see an example of how a form may currently be rendered in a template and see
-how I would use the new capabilites in Django 4.0.
+how I would use the new capabilities in Django 4.0.
 
 I found the example below from one of Django's own projects. It may also be that the 
 form is written out in full in multiple places increasing the maintenance burden, let us
@@ -80,7 +80,7 @@ Once this is defined the template can be updated.
 
 ### Form Template
 
-I believe the gold standardard is that in your main template you should use `{{ form }}`
+I believe the gold standard is that in your main template you should use `{{ form }}`
 to render your form.
 
 Django 4.0 introduced template based rendering for forms which allows us to do
@@ -131,7 +131,7 @@ Notable features being used here
 
 ### Use the template
 
-To use this template to render the form the following changes are requried. 
+To use this template to render the form the following changes are required. 
 
 1. Define the [`template_name`](https://docs.djangoproject.com/en/4.0/ref/forms/api/#template-name) 
    on the form definition. 
@@ -140,7 +140,7 @@ To use this template to render the form the following changes are requried.
    on the form definition. Without this, the form will be rendered in the order which 
    the fields are defined in the model.
 
-3. Use `{{ form }}` to use the template
+3. Use `{{ form }}` to use the template.
 
 Let's see the diff for these changes.
 
@@ -211,7 +211,7 @@ Django 4.1 will bring several new features to form rendering.
 Yes!
 
 As of Django 4.1 Forms and Widgets (i.e. its `<input>`) are renderable using 
-the tempate engine. Django also has a strong concept of a field with the 
+the template engine. Django also has a strong concept of a field with the 
 [`BoundField`](https://docs.djangoproject.com/en/4.0/ref/forms/api/#django.forms.BoundField)
 class. This contains all of the information required to render a field such as
 its label, errors, help text and its Widget. 
