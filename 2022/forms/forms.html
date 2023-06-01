@@ -2,13 +2,13 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="prev" title="2022 Posts" href="../index.html" />
 
-    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
+    <!-- Generated with Sphinx 6.2.1 and Furo 2023.05.20 -->
         <title>Forms in Django 4.0+ - David Smith&#39;s blog documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=e6660623a769aa55fea372102b9bf3151b292993" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -149,14 +149,14 @@
   <span class="sidebar-brand-text">David Smith's blog  documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">2022 Posts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">2022 Posts</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 2022 Posts</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Forms in Django 4.0+</a></li>
 </ul>
 </li>
@@ -179,7 +179,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -237,31 +238,31 @@ be moved to either the model or form definition. In this scenario I have added
 the <code class="docutils literal notranslate"><span class="pre">help_text</span></code> to the Form definition. See
 <a class="reference external" href="https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/#overriding-the-default-fields">Overriding the default fields</a>
 for more details.</p>
-<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="w">class SnippetForm(forms.ModelForm):</span>
-<span class="w"> </span>   title = forms.CharField(validators=[validate_non_whitespace_only_string])<span class="w"></span>
-<span class="w"> </span>   description = forms.CharField(<span class="w"></span>
-<span class="w"> </span>       validators=[validate_non_whitespace_only_string],<span class="w"></span>
-<span class="w"> </span>       widget=forms.Textarea,<span class="w"></span>
-<span class="gi">+        help_text=SafeString(&quot;You can use Markdown syntax here (see the sidebar), but &lt;strong&gt;raw HTML will be removed&lt;/strong&gt;.&quot;),</span><span class="w"></span>
-<span class="w"> </span>   )<span class="w"></span>
-<span class="w"> </span>   code = forms.CharField(validators=[validate_non_whitespace_only_string], widget=forms.Textarea)<span class="w"></span>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span>class SnippetForm(forms.ModelForm):
+<span class="w"> </span>   title = forms.CharField(validators=[validate_non_whitespace_only_string])
+<span class="w"> </span>   description = forms.CharField(
+<span class="w"> </span>       validators=[validate_non_whitespace_only_string],
+<span class="w"> </span>       widget=forms.Textarea,
+<span class="gi">+        help_text=SafeString(&quot;You can use Markdown syntax here (see the sidebar), but &lt;strong&gt;raw HTML will be removed&lt;/strong&gt;.&quot;),</span>
+<span class="w"> </span>   )
+<span class="w"> </span>   code = forms.CharField(validators=[validate_non_whitespace_only_string], widget=forms.Textarea)
 
-<span class="w"> </span>   class Meta:<span class="w"></span>
-<span class="w"> </span>       model = Snippet<span class="w"></span>
-<span class="w"> </span>       exclude = (&quot;author&quot;, &quot;bookmark_count&quot;, &quot;rating_score&quot;)<span class="w"></span>
-<span class="gi">+        help_texts = {</span><span class="w"></span>
-<span class="gi">+            &#39;tags&#39;: &#39;Use commas between tag names, and hyphens for multiple words, like &quot;tag1, tag2, tag3-with-long-name&quot;.&#39;,</span><span class="w"></span>
-<span class="w"> </span>       }<span class="w"></span>
+<span class="w"> </span>   class Meta:
+<span class="w"> </span>       model = Snippet
+<span class="w"> </span>       exclude = (&quot;author&quot;, &quot;bookmark_count&quot;, &quot;rating_score&quot;)
+<span class="gi">+        help_texts = {</span>
+<span class="gi">+            &#39;tags&#39;: &#39;Use commas between tag names, and hyphens for multiple words, like &quot;tag1, tag2, tag3-with-long-name&quot;.&#39;,</span>
+<span class="w"> </span>       }
 </pre></div>
 </div>
 <p>I have chosen to mark the <code class="docutils literal notranslate"><span class="pre">help_text</span></code> as a <code class="docutils literal notranslate"><span class="pre">SafeString</span></code> here to avoid needing
 to use the <code class="docutils literal notranslate"><span class="pre">|safe</span></code> filter in the template.</p>
 <p>Once this is defined the template can be updated.</p>
-<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="gd">-      &lt;dd&gt;{{ form.tags }} &lt;br /&gt;Use commas between tag names, and hyphens for multiple words, like &quot;tag1, tag2, tag3-with-long-name&quot;&lt;/dd&gt;</span><span class="w"></span>
-<span class="gi">+      &lt;dd&gt;{{ form.tags }} &lt;br /&gt;{{ form.tags.help_text }}&lt;/dd&gt;</span><span class="w"></span>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="gd">-      &lt;dd&gt;{{ form.tags }} &lt;br /&gt;Use commas between tag names, and hyphens for multiple words, like &quot;tag1, tag2, tag3-with-long-name&quot;&lt;/dd&gt;</span>
+<span class="gi">+      &lt;dd&gt;{{ form.tags }} &lt;br /&gt;{{ form.tags.help_text }}&lt;/dd&gt;</span>
 
-<span class="gd">-      You can use Markdown syntax here (see the sidebar), but &lt;strong&gt;raw HTML will be removed&lt;/strong&gt;.&lt;/dd&gt;</span><span class="w"></span>
-<span class="gi">+      {{ form.description.help_text }}&lt;/dd&gt;</span><span class="w"></span>
+<span class="gd">-      You can use Markdown syntax here (see the sidebar), but &lt;strong&gt;raw HTML will be removed&lt;/strong&gt;.&lt;/dd&gt;</span>
+<span class="gi">+      {{ form.description.help_text }}&lt;/dd&gt;</span>
 </pre></div>
 </div>
 </section>
@@ -321,30 +322,30 @@ the fields are defined in the model.</p></li>
 </ol>
 <p>Let’s see the diff for these changes.</p>
 <p>In the form:</p>
-<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>class SnippetForm(forms.ModelForm):<span class="w"></span>
-<span class="gi">+    template_name = &quot;cab/snippet_form.html&quot;</span><span class="w"></span>
-<span class="gi">+    field_order = [&quot;title&quot;, &quot;language&quot;, &quot;version&quot;, &quot;tags&quot;, &quot;code&quot;, &quot;description&quot;]</span><span class="w"></span>
+<div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>class SnippetForm(forms.ModelForm):
+<span class="gi">+    template_name = &quot;cab/snippet_form.html&quot;</span>
+<span class="gi">+    field_order = [&quot;title&quot;, &quot;language&quot;, &quot;version&quot;, &quot;tags&quot;, &quot;code&quot;, &quot;description&quot;]</span>
 </pre></div>
 </div>
 <p>In the template:</p>
 <div class="highlight-diff notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>
-<span class="gd">-    &lt;dl&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dt&gt;&lt;label for=&quot;id_title&quot;&gt;Title: {% if form.title.errors %}&lt;span class=&quot;error&quot;&gt;{{ form.title.errors|join:&quot;, &quot; }}&lt;/span&gt;{% endif %}&lt;/label&gt;&lt;/dt&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dd&gt;{{ form.title }}&lt;/dd&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dt&gt;&lt;label for=&quot;id_language&quot;&gt;Language:&lt;/label&gt;&lt;/dt&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dd&gt;{{ form.language }}{% if form.language.errors %}&lt;span class=&quot;error&quot;&gt;&amp;nbsp;&amp;nbsp;{{ form.language.errors|join:&quot;, &quot; }}&lt;/span&gt;{% endif %}&lt;/dd&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dt&gt;&lt;label for=&quot;id_version&quot;&gt;Version:&lt;/label&gt;&lt;/dt&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dd&gt;{{ form.version }}{% if form.version.errors %}&lt;span class=&quot;error&quot;&gt;&amp;nbsp;&amp;nbsp;{{ form.version.errors|join:&quot;, &quot; }}&lt;/span&gt;{% endif %}&lt;/dd&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dt&gt;&lt;label for=&quot;id_tag_list&quot;&gt;Tags: {% if form.tags.errors %}&lt;span class=&quot;error&quot;&gt;{{ form.tags.errors|join:&quot;, &quot; }}&lt;/span&gt;{% endif %} &lt;/label&gt;&lt;/dt&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dd&gt;{{ form.tags }} &lt;br /&gt;Use commas between tag names, and hyphens for multiple words, like &quot;tag1, tag2, tag3-with-long-name&quot;&lt;/dd&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dt&gt;&lt;label for=&quot;id_code&quot;&gt;Code: {% if form.code.errors %}&lt;span class=&quot;error&quot;&gt;{{ form.code.errors|join:&quot;, &quot; }}&lt;/span&gt;{% endif %}&lt;/label&gt;&lt;/dt&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dd&gt;{{ form.code }}&lt;/dd&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dt&gt;&lt;label for=&quot;id_description&quot;&gt;Description: {% if form.description.errors %}&lt;span class=&quot;error&quot;&gt;{{ form.description.errors|join:&quot;, &quot; }}&lt;/span&gt;{% endif %}&lt;/label&gt;&lt;/dt&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dd&gt;{{ form.description }}&lt;br /&gt;</span><span class="w"></span>
-<span class="gd">-      You can use Markdown syntax here (see the sidebar), but &lt;strong&gt;raw HTML will be removed&lt;/strong&gt;.&lt;/dd&gt;</span><span class="w"></span>
-<span class="gd">-      &lt;dt&gt;&lt;button type=&quot;submit&quot;&gt;Save&lt;/button&gt;&lt;/dt&gt;</span><span class="w"></span>
-<span class="gd">-    &lt;/dl&gt;</span><span class="w"></span>
-<span class="gi">+   {{ form }} </span><span class="w"></span>
+<span class="gd">-    &lt;dl&gt;</span>
+<span class="gd">-      &lt;dt&gt;&lt;label for=&quot;id_title&quot;&gt;Title: {% if form.title.errors %}&lt;span class=&quot;error&quot;&gt;{{ form.title.errors|join:&quot;, &quot; }}&lt;/span&gt;{% endif %}&lt;/label&gt;&lt;/dt&gt;</span>
+<span class="gd">-      &lt;dd&gt;{{ form.title }}&lt;/dd&gt;</span>
+<span class="gd">-      &lt;dt&gt;&lt;label for=&quot;id_language&quot;&gt;Language:&lt;/label&gt;&lt;/dt&gt;</span>
+<span class="gd">-      &lt;dd&gt;{{ form.language }}{% if form.language.errors %}&lt;span class=&quot;error&quot;&gt;&amp;nbsp;&amp;nbsp;{{ form.language.errors|join:&quot;, &quot; }}&lt;/span&gt;{% endif %}&lt;/dd&gt;</span>
+<span class="gd">-      &lt;dt&gt;&lt;label for=&quot;id_version&quot;&gt;Version:&lt;/label&gt;&lt;/dt&gt;</span>
+<span class="gd">-      &lt;dd&gt;{{ form.version }}{% if form.version.errors %}&lt;span class=&quot;error&quot;&gt;&amp;nbsp;&amp;nbsp;{{ form.version.errors|join:&quot;, &quot; }}&lt;/span&gt;{% endif %}&lt;/dd&gt;</span>
+<span class="gd">-      &lt;dt&gt;&lt;label for=&quot;id_tag_list&quot;&gt;Tags: {% if form.tags.errors %}&lt;span class=&quot;error&quot;&gt;{{ form.tags.errors|join:&quot;, &quot; }}&lt;/span&gt;{% endif %} &lt;/label&gt;&lt;/dt&gt;</span>
+<span class="gd">-      &lt;dd&gt;{{ form.tags }} &lt;br /&gt;Use commas between tag names, and hyphens for multiple words, like &quot;tag1, tag2, tag3-with-long-name&quot;&lt;/dd&gt;</span>
+<span class="gd">-      &lt;dt&gt;&lt;label for=&quot;id_code&quot;&gt;Code: {% if form.code.errors %}&lt;span class=&quot;error&quot;&gt;{{ form.code.errors|join:&quot;, &quot; }}&lt;/span&gt;{% endif %}&lt;/label&gt;&lt;/dt&gt;</span>
+<span class="gd">-      &lt;dd&gt;{{ form.code }}&lt;/dd&gt;</span>
+<span class="gd">-      &lt;dt&gt;&lt;label for=&quot;id_description&quot;&gt;Description: {% if form.description.errors %}&lt;span class=&quot;error&quot;&gt;{{ form.description.errors|join:&quot;, &quot; }}&lt;/span&gt;{% endif %}&lt;/label&gt;&lt;/dt&gt;</span>
+<span class="gd">-      &lt;dd&gt;{{ form.description }}&lt;br /&gt;</span>
+<span class="gd">-      You can use Markdown syntax here (see the sidebar), but &lt;strong&gt;raw HTML will be removed&lt;/strong&gt;.&lt;/dd&gt;</span>
+<span class="gd">-      &lt;dt&gt;&lt;button type=&quot;submit&quot;&gt;Save&lt;/button&gt;&lt;/dt&gt;</span>
+<span class="gd">-    &lt;/dl&gt;</span>
+<span class="gi">+   {{ form }} </span>
 </pre></div>
 </div>
 <p>With the template being associated with the form means that we can avoid repetition
@@ -414,7 +415,7 @@ thought will be required.</p>
         <div class="related-pages">
           
           <a class="prev-page" href="../index.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -436,9 +437,7 @@ thought will be required.</p>
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -450,7 +449,7 @@ thought will be required.</p>
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -478,10 +477,8 @@ thought will be required.</p>
     </aside>
   </div>
 </div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     </body>
 </html>
